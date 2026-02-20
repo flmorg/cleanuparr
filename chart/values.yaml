@@ -67,6 +67,24 @@ ingresses:
             pathType: Prefix
             serviceName: oauth2-service
             servicePort: 80
+  - name: pwa-ingress
+    tls:
+      secretName: tls-secret
+    hosts:
+      - host: clnp.@vault(secrets/data/domain main | DOMAIN_NAME)
+        paths:
+          - path: /manifest.webmanifest
+            pathType: Exact
+            serviceName: service
+            servicePort: 80
+          - path: /sw.js
+            pathType: Exact
+            serviceName: service
+            servicePort: 80
+          - path: /icons
+            pathType: Exact
+            serviceName: service
+            servicePort: 80
 
 pvcs:
   - name: storage-pvc
