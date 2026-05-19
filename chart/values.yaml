@@ -29,9 +29,8 @@ deployment:
           cpu: 1000m
           memory: 512Mi
       volumeMounts:
-        - name: storage
+        - name: config
           mountPath: /config
-          subPath: cleanuparr/config
         - name: storage
           mountPath: /downloads/general2
           subPath: media/downloads/general2
@@ -39,6 +38,9 @@ deployment:
           mountPath: /downloads/cross-seed
           subPath: media/downloads/cross-seed
   volumes:
+    - name: config
+      type: pvc
+      typeName: config-pvc
     - name: storage
       type: pvc
       typeName: storage-pvc
@@ -87,6 +89,11 @@ ingresses:
             servicePort: 80
 
 pvcs:
+  - name: config-pvc
+    storageClassName: longhorn
+    accessModes:
+      - ReadWriteOnce
+    size: 1Gi
   - name: storage-pvc
     storageClassName: local-path-persistent
     accessModes:
