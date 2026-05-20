@@ -48,12 +48,12 @@ deployment:
 ingresses:
   - name: ingress
     annotations:
-      nginx.ingress.kubernetes.io/auth-url: https://clnp.@vault(secrets/data/domain main | DOMAIN_NAME)/oauth2/auth
-      nginx.ingress.kubernetes.io/auth-signin: https://clnp.@vault(secrets/data/domain main | DOMAIN_NAME)/oauth2/start?rd=$escaped_request_uri
+      nginx.ingress.kubernetes.io/auth-url: https://clnp@env(id|-).@vault(secrets/data/domain main | DOMAIN_NAME)/oauth2/auth
+      nginx.ingress.kubernetes.io/auth-signin: https://clnp@env(id|-).@vault(secrets/data/domain main | DOMAIN_NAME)/oauth2/start?rd=$escaped_request_uri
     tls:
       secretName: tls-secret
     hosts:
-      - host: clnp.@vault(secrets/data/domain main | DOMAIN_NAME)
+      - host: clnp@env(id|-).@vault(secrets/data/domain main | DOMAIN_NAME)
         paths:
           - path: "/"
             pathType: Prefix
@@ -63,7 +63,7 @@ ingresses:
     tls:
       secretName: tls-secret
     hosts:
-      - host: clnp.@vault(secrets/data/domain main | DOMAIN_NAME)
+      - host: clnp@env(id|-).@vault(secrets/data/domain main | DOMAIN_NAME)
         paths:
           - path: /oauth2
             pathType: Prefix
@@ -73,7 +73,7 @@ ingresses:
     tls:
       secretName: tls-secret
     hosts:
-      - host: clnp.@vault(secrets/data/domain main | DOMAIN_NAME)
+      - host: clnp@env(id|-).@vault(secrets/data/domain main | DOMAIN_NAME)
         paths:
           - path: /manifest.webmanifest
             pathType: Exact
@@ -91,6 +91,7 @@ ingresses:
 pvcs:
   - name: config-pvc
     storageClassName: longhorn
+    role: config
     accessModes:
       - ReadWriteOnce
     size: 1Gi
